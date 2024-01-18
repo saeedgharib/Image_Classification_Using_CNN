@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Classification App</title>
+</head>
+<body>
+    <h1>Image Classification App</h1>
+    <form id="upload-form">
+        <input type="file" name="image" id="image-input" accept="image/*">
+        <button type="button" onclick="predict()">Predict</button>
+    </form>
+    <div id="result"></div>
+
+    <script>
+        function predict() {
+            var formData = new FormData(document.getElementById('upload-form'));
+            fetch('/predict', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('result').innerHTML = `
+                    <p>Predicted Class: ${data.class}</p>
+                    <p>Object Name: ${data.object_name}</p>
+                    <p>Confidence: ${data.confidence}</p>
+                `;
+            })
+            .catch(error => console.error('Error:', error));
+        }
+    </script>
+</body>
+</html>
